@@ -1,8 +1,8 @@
 .btn {
-    display: flex;
+  display: flex;
 }
 
 .container{
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }

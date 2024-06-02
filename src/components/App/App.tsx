@@ -7,37 +7,37 @@ import ImageModal from "../ImageModal/ImageModal";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Loader from "../Loader/Loader";
-
+import { Image } from "../../types";
 
 export default function App() {
-  const [images, setImages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [page, setPage] = useState(1);
-  const [query, setQuery] = useState("");
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [description, setDescription] = useState(null);
+  const [images, setImages] = useState<Image[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [query, setQuery] = useState<string>("");
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
 
-  const openModal = (bigImg, alt) => {
+  const openModal = (bigImg: string, alt: string): void => {
     setSelectedImage(bigImg);
     setDescription(alt);
     setModalIsOpen(true);
   };
 
-  const closeModal = () => {
-    setSelectedImage(null);
-    setDescription(null);
+  const closeModal = (): void => {
+    setSelectedImage("");
+    setDescription("");
     setModalIsOpen(false);
   };
 
-  const handleQuery = async (newQuery) => {
+  const handleQuery = (newQuery: string): void => {
     setQuery(newQuery);
     setPage(1);
     setImages([]);
   };
 
-  const handleLoadMore = () => {
+  const handleLoadMore = (): void => {
     setPage(page + 1);
   };
 
@@ -46,7 +46,7 @@ export default function App() {
       return;
     }
 
-    async function getImages() {
+    async function getImages<T>(): Promise<void> {
       try {
         setIsLoading(true);
         const data = await fetchImages(query, page);
@@ -66,13 +66,10 @@ export default function App() {
     <>
       <SearchBar onSubmit={handleQuery} />
       {error && <ErrorMessage />}
-
       {images.length > 0 && (
         <ImageGallery listImages={images} openModal={openModal} />
       )}
-
       {isLoading && <Loader />}
-
       {images.length > 0 && !isLoading && (
         <LoadMoreBtn onClick={handleLoadMore} />
       )}
